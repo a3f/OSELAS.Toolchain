@@ -57,7 +57,10 @@ CROSS_BINUTILS_CONF_OPT		:= \
 	--disable-nls \
 	\
 	--enable-threads \
-	--enable-plugins
+	--enable-plugins \
+	--with-pkgversion=$(PTXCONF_CROSS_PKGVERSION) \
+	$(call ptx/ifdef,PTXCONF_CROSS_BUGURL, \
+		--with-bugurl=$(PTXCONF_CROSS_BUGURL))
 
 # ----------------------------------------------------------------------------
 # Install

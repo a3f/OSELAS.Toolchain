@@ -57,6 +57,14 @@ config GNU_TARGET
 	  The GNU_TARGET specifies which toolchain variant is to be
 	  built.
 
+config CROSS_PKGVERSION
+	string
+	default "${PTXCONF_PROJECT}"
+
+config CROSS_BUGURL
+	string
+	prompt "Custom bug tracker URL"
+
 #
 # sizeof long double
 #

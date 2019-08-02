@@ -93,6 +93,8 @@ CROSS_GCC_AUTOCONF_COMMON := \
 	--enable-symvers=gnu \
 	\
 	--with-pkgversion=$(PTXCONF_CROSS_GCC_PKGVERSION) \
+	$(call ptx/ifdef,PTXCONF_CROSS_BUGURL, \
+		--with-bugurl=$(PTXCONF_CROSS_BUGURL))
 	--enable-threads=$(PTXCONF_CROSS_GCC_THREADS) \
 	--with-system-zlib \
 	\
