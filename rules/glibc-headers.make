@@ -29,6 +29,21 @@ GLIBC_HEADERS_URL	 = $(GLIBC_URL)
 GLIBC_HEADERS_BUILD_OOT	:= YES
 GLIBC_HEADERS_LICENSE	:= ignore
 
+GLIBC_PORTS_VERSION	:= $(call remove_quotes,$(PTXCONF_GLIBC_PORTS_VERSION))
+GLIBC_PORTS_MD5		:= $(call remove_quotes,$(PTXCONF_GLIBC_PORTS_MD5))
+GLIBC_PORTS		:= glibc-ports-$(GLIBC_PORTS_VERSION)
+GLIBC_PORTS_SOURCE	:= $(SRCDIR)/$(GLIBC_PORTS).$(GLIBC_SUFFIX)
+$(GLIBC_PORTS_SOURCE)	:= GLIBC_PORTS
+GLIBC_PORTS_DIR		:= $(BUILDDIR)/$(GLIBC)/ports
+GLIBC_PORTS_URL		:= \
+	$(call ptx/mirror, GNU, glibc/$(GLIBC_PORTS).$(GLIBC_SUFFIX)) \
+	ftp://sources.redhat.com/pub/glibc/snapshots/$(GLIBC_PORTS).$(GLIBC_SUFFIX) \
+	http://www.pengutronix.de/software/ptxdist/temporary-src/glibc/$(GLIBC_PORTS).$(GLIBC_SUFFIX)
+
+ifdef PTXCONF_GLIBC_PORTS
+GLIBC_SOURCES		+= $(GLIBC_PORTS_SOURCE)
+endif
+
 # ----------------------------------------------------------------------------
 # Prepare
 # ----------------------------------------------------------------------------
@@ -100,6 +115,19 @@ $(STATEDIR)/glibc-headers.prepare:
 	@sed -i "s:^\(enable_option_checking\)=.*:\1=no:" \
 		$(GLIBC_HEADERS_DIR)/configure
 	@$(call world/prepare, GLIBC_HEADERS)
+	@$(call touch)
+
+# ----------------------------------------------------------------------------
+# Extract
+# ----------------------------------------------------------------------------
+@@ $(STATEDIR)/glibc.extract:
+	@$(call targetinfo)
+	@$(call clean, $(GLIBC_DIR))
+	@$(call extract, GLIBC, $(BUILDDIR_DEBUG))
+ifdef PTXCONF_GLIBC_PORTS
+	@$(call extract, GLIBC_PORTS, $(BUILDDIR_DEBUG))
+endif
+	@$(call patchin, GLIBC, $(GLIBC_DIR))
 	@$(call touch)
 
 # ----------------------------------------------------------------------------
